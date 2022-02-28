@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<div class="form-content">
+    <form class="form" [formGroup]="addPersonForm">
+    <div class="form-head">Address Book Form</div>
+        
+    <!--Input Name -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="name">Full Name</label>
+            <input matInput type="text" class="form-control" formControlName="name" >
+        </mat-form-field>
+    </div>
+
+    <!--Input Address -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="address" >Address</label>
+            <input  matInput type="text" class="form-control address" formControlName="address" >
+        </mat-form-field>
+    </div>
+    <!--Input City -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="city" >City</label>
+            <input matInput matInput type="name" class="form-control city-field" formControlName="city" >
+        </mat-form-field>
+    <!-- Input State -->
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="state" >State</label>
+            <input matInput type="name" class="form-control state-field" formControlName="state" >
+        </mat-form-field>
+    <!-- Input Zip -->
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="zip" >Zip</label>
+            <input matInput type="number" class="form-control zip-field" formControlName="zip" >
+        </mat-form-field>
+    </div>
+
+    <!--Input Phone Number -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="phone" >Phone Number</label>
+            <input matInput type="number" class="form-control phone-field" formControlName="phone">
+        </mat-form-field>
+        <!--Input Email ID -->
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="email" >Email ID</label>
+            <input matInput type="name" class="form-control email-field" formControlName="email">
+        </mat-form-field>
+    </div>
+
+
+    <div class="buttonParent">
+    <a routerLink="/home-page">
+        <button mat-raised-button color="accent" class="resetButton button cancelButton">Cancel</button>
+    </a>
+    <div class="submit-reset">
+        <button mat-raised-button type="submit" class="button submitButton" id="submitButton" (click)="onSubmit()">Submit</button>
+        <button mat-raised-button color="accent" type="reset" class="resetButton button">Reset</button>
+    </div>
+    </div>
+    </form>
+</div>
