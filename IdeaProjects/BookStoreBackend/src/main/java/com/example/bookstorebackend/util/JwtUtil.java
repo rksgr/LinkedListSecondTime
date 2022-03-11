@@ -1,7 +1,12 @@
 package com.example.bookstorebackend.util;
 
+import com.example.bookstorebackend.entity.JwtRequest;
+import com.example.bookstorebackend.entity.JwtResponse;
 import com.example.bookstorebackend.entity.UserData;
+import com.example.bookstorebackend.service.CustomUserDataService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +16,8 @@ import java.util.Map;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
 public class JwtUtil {
@@ -19,6 +26,7 @@ public class JwtUtil {
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 10;
 
     private String SECRET_KEY = "AltafSecretHussain";
+
 
     // Retrieve username from jwt token
     public String getUserNameFromToken(String token){
@@ -61,10 +69,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Validate User
-    public Boolean validateToken(String token, UserData userData){
+    // Validate Token
+    public Boolean validateToken(String token, UserDetails userDetails){
         final String username = getUserNameFromToken(token);
-        return (username.equals(userData.getEmailId())
+        return (username.equals(userDetails.getUsername())
                 && !isTokenExpired(token));
     }
 }

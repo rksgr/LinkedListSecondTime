@@ -22,6 +22,9 @@ public class BookStoreService implements IBookStoreService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private BookRepository getBookRepository1;
+
     // Method to return all the books
     @Override
     public List<BookStore> getAllBooks() {
@@ -48,6 +51,11 @@ public class BookStoreService implements IBookStoreService {
     public BookStore addBookToStore(BookStoreDTO bookStoreDTO) {
         BookStore bookStore = new BookStore(bookStoreDTO);
         return bookRepository.save(bookStore);
+    }
+
+    @Override
+    public BookStore changeBookQuantity(int bookId, int bookQuantity) {
+        return null;
     }
 
 }

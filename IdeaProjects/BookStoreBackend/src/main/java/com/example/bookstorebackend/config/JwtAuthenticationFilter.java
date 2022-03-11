@@ -32,12 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Get jwt
         // Bearer
         // Validate
-        String requestTokenHeader =request.getHeader("Authorization");
+        String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
 
-        // Null and format (length of bearer and space = 7)
-        if( requestTokenHeader != null & requestTokenHeader.startsWith("Bearer")){
+        // If tokenheader is not null and format (length of bearer and space = 7)
+        if( requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")){
             jwtToken = requestTokenHeader.substring(7);
             try{
                 username = this.jwtUtil.getUserNameFromToken(jwtToken);
@@ -48,13 +48,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             UserDetails userDetails =this.customUserDataService.loadUserByUsername(username);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                        = new UsernamePasswordAuthenticationToken(userDetails,
-                                null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (jwtUtil.validateToken(jwtToken, userDetails)) {
 
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+                            = new UsernamePasswordAuthenticationToken(userDetails,
+                            null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
             }else{
                 System.out.println("The given token is invalid");
             }

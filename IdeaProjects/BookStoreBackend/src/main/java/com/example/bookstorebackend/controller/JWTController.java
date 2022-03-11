@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JWTController {
 
-
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -30,15 +28,14 @@ public class JWTController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // Not to be shown to user - push to util
-    @PostMapping(value="/generateToken")
+    // code to generate token
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception
     {
         System.out.println(jwtRequest);
         try{
             this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getEmailId(),
-                                                            jwtRequest.getPassword()));
+                            jwtRequest.getPassword()));
             System.out.println("jwt request ");
         }
         catch(UsernameNotFoundException e)
@@ -53,5 +50,4 @@ public class JWTController {
         System.out.println("Jwt  token: " + token);
         return ResponseEntity.ok(new JwtResponse(token));
     }
-
 }

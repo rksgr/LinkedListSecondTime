@@ -26,6 +26,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationFilter jwtFilter;
 
 
+    // The exempted paths where authentication using Jwt token is not required
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .csrf()
@@ -34,6 +35,18 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/generateToken")
+                .permitAll()
+                .antMatchers("/userservice/get")
+                .permitAll()
+                .antMatchers("/userservice/register")
+                .permitAll()
+                .antMatchers("/bookstore/get")
+                .permitAll()
+                .antMatchers("/bookstore/getById/{bookId}")
+                .permitAll()
+                .antMatchers("/bookstore/delete")
+                .permitAll()
+                .antMatchers("/bookstore/add")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
