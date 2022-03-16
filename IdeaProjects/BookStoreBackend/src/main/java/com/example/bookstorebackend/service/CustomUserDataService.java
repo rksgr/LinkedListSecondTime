@@ -49,10 +49,8 @@ public class CustomUserDataService implements IUserDataService, UserDetailsServi
     }
 
     // For login of a user, using email and password as the credentials
-
     @Override
     public UserData loginUser(JwtRequest jwtRequest){
-        System.out.println("Inside service class --- login new user");
         // Match email and password
         String email = jwtRequest.emailId;
         String password = jwtRequest.password;

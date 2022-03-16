@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,8 +30,10 @@ public class JWTController {
     private JwtUtil jwtUtil;
 
     // code to generate token
+    @RequestMapping("/generateToken")
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception
     {
+        System.out.println("Inside JWT controller class");
         System.out.println(jwtRequest);
         try{
             this.authenticationManager
