@@ -4,6 +4,7 @@ import com.example.bookstorebackend.service.CustomUserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,9 +41,15 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/userservice/register")
                 .permitAll()
+                .antMatchers("/userservice/verify")
+                .permitAll()
+                .antMatchers("/userservice/deleteByEmailId/{emailId}")
+                .permitAll()
+                .antMatchers("/userservice/getByEmailId/{emailId}")
+                .permitAll()
                 .antMatchers("/bookstore/get")
                 .permitAll()
-                .antMatchers("/bookstore/getById/{bookId}")
+                .antMatchers("/bookstore/getById/**")
                 .permitAll()
                 .antMatchers("/bookstore/delete")
                 .permitAll()

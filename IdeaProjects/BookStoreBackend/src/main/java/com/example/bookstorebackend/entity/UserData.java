@@ -4,9 +4,11 @@ import com.example.bookstorebackend.dto.RegisterDTO;
 import com.example.bookstorebackend.dto.UserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.type.LocalDateType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
@@ -26,7 +28,7 @@ class UserData {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "kyc")
+    @Column(name = "kyc",unique=true)
     private String kyc;
 
     @Column(name = "dob")
@@ -41,7 +43,7 @@ class UserData {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email_id")
+    @Column(name = "email_id",unique=true)
     private String emailId;
 
     @Column(name = "verify")
@@ -52,7 +54,7 @@ class UserData {
     private Integer otp;
 
     @Column(name = "purchase_date")
-    private LocalDate purchaseDate;
+    private LocalDate purchaseDate = LocalDate.of(2020,10,10);
 
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
@@ -71,14 +73,13 @@ class UserData {
         this.lastName = registerDTO.lastName;
         this.kyc = registerDTO.kyc;
         this.dob = registerDTO.dob;
-        this.registeredDate = registerDTO.registeredDate;
-        this.updatedDate = registerDTO.updatedDate;
-        this.firstName = registerDTO.firstName;
+        this.registeredDate = LocalDate.of(2022,3,11).plusDays(2);
+        this.updatedDate = LocalDate.now();
         this.password = registerDTO.password;
         this.emailId = registerDTO.emailId;
-        this.verify = registerDTO.verify;
-        this.purchaseDate = registerDTO.purchaseDate;
-        this.expiryDate = registerDTO.expiryDate;
+        this.verify = true;
+        this.purchaseDate = LocalDate.now();
+        this.expiryDate = LocalDate.now();
     }
 
     public void updateUserData(UserDTO userDTO) {
@@ -88,7 +89,6 @@ class UserData {
         this.dob = userDTO.dob;
         this.registeredDate = userDTO.registeredDate;
         this.updatedDate = userDTO.updatedDate;
-        this.firstName = userDTO.firstName;
         this.password = userDTO.password;
         this.emailId = userDTO.emailId;
         this.verify = userDTO.verify;
@@ -96,5 +96,3 @@ class UserData {
         this.expiryDate = userDTO.expiryDate;
     }
 }
-
-

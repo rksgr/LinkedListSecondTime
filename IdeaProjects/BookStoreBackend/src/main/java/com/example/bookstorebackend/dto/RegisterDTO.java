@@ -13,11 +13,11 @@ class RegisterDTO {
     public String lastName;
     public String kyc;
     public LocalDate dob;
-    public LocalDate registeredDate;
-    public LocalDate updatedDate;
+    //public LocalDate registeredDate;
+    //public LocalDate updatedDate;
     public String password;
     public String emailId;
-    public Boolean verify;
-    public LocalDate purchaseDate;
-    public LocalDate expiryDate;
+    //public Boolean verify;
+    //public LocalDate purchaseDate;
+    //public LocalDate expiryDate;
 }
