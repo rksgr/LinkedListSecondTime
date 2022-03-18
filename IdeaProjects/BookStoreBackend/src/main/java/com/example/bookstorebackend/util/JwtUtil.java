@@ -1,78 +1,57 @@
 package com.example.bookstorebackend.util;
 
-import com.example.bookstorebackend.entity.JwtRequest;
-import com.example.bookstorebackend.entity.JwtResponse;
-import com.example.bookstorebackend.entity.UserData;
-import com.example.bookstorebackend.service.CustomUserDataService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.function.Function;
-import java.util.Map;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.Verification;
 
 @Component
 public class JwtUtil {
 
-    private static final long serialVersionUID = -2550185165626007844L;
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 10;
+    private static final String SECRET_KEY = "secretkey";
 
-    private String SECRET_KEY = "AltafSecretHussain";
+    // Method to generate token containing emailId as claim and using HMAC512 algorithm
+    public String generateToken(String emailId) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(SECRET_KEY);
 
+            String jwtToken = JWT.create()
+                                .withClaim("emailId", emailId)
+                                .sign(algorithm);
+            return jwtToken;
+        } catch (JWTCreationException e) {
+            e.printStackTrace();
 
-    // Retrieve username from jwt token
-    public String getUserNameFromToken(String token){
-        return getClaimFromToken(token, Claims::getSubject);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    // Retrieve expiration date from jwt token
-    public Date getExpirationDateFromToken(String token){
-        return getClaimFromToken(token, Claims::getExpiration);
-    }
-    //
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
+    // Returns the emailId extracted from the token
+    public String decodeToken(String jwtToken) {
 
-    // To retrieve information from token we will need secret key
-    private Claims getAllClaimsFromToken(String token){
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-    }
+        String emailId;
+        Verification verifyToken = null;
 
-    // Check if the token has expired
-    private Boolean isTokenExpired(String token){
-        return getExpirationDateFromToken(token).before(new Date());
-    }
+        try {
+            verifyToken = JWT.require(Algorithm.HMAC512(SECRET_KEY));
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
-    // Generate token for the user
-    public String generateToken(UserDetails userDetails){
-        Map<String, Object> claims =new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
-    }
+        JWTVerifier verifier = verifyToken.build();
 
-    private String doGenerateToken(Map<String, Object> claims, String subject){
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .compact();
-    }
+        DecodedJWT decodedJwt = verifier.verify(jwtToken);
 
-    // Validate Token
-    public Boolean validateToken(String token, UserDetails userDetails){
-        final String username = getUserNameFromToken(token);
-        return (username.equals(userDetails.getUsername())
-                && !isTokenExpired(token));
+        Claim claim = decodedJwt.getClaim("emailId");
+
+        emailId = claim.asString();
+        return emailId;
     }
 }

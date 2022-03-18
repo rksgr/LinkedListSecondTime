@@ -1,6 +1,7 @@
 package com.example.bookstorebackend.service;
 
 import com.example.bookstorebackend.dto.RegisterDTO;
+import com.example.bookstorebackend.dto.ResetPasswordDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
 import com.example.bookstorebackend.dto.VerifyUser;
 import com.example.bookstorebackend.entity.JwtRequest;
@@ -21,4 +22,8 @@ public interface ICustomUserDataService {
     void deleteUserByEmailId(String emailId);
 
     UserData getUserByEmailId(String emailId);
+
+    ResponseDTO forgotPassword(String emailId);
+
+    ResponseDTO resetPassword(String token, String newPasswrd);
 }

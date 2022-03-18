@@ -1,12 +1,13 @@
 package com.example.bookstorebackend.controller;
 
 import com.example.bookstorebackend.dto.BookStoreDTO;
+import com.example.bookstorebackend.dto.ChangeBookPriceDTO;
+import com.example.bookstorebackend.dto.ChangeBookQtyDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
-import com.example.bookstorebackend.entity.BookStore;
+import com.example.bookstorebackend.entity.BookData;
 import com.example.bookstorebackend.service.IBookStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class BookController {
      */
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO> addBookToStore(@RequestBody BookStoreDTO bookStoreDTO){
-        BookStore bookStore = null;
+        BookData bookStore = null;
         bookStore = bookStoreService.addBookToStore(bookStoreDTO);
         ResponseDTO respDTO = new ResponseDTO("Added Book to the BookStore working ", bookStore);
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
@@ -55,14 +56,27 @@ public class BookController {
     }
 
     /**
-     * Method to change the number of books in the book store
+     * Method to change the quantity of a given Book in the book store
      */
-    @PutMapping("/update/{bookId}/{qty}")
-    public ResponseEntity<ResponseDTO> changeBookQuantity(@PathVariable("bookId") int bookId,
-                                                          @PathVariable("qty") int bookQuantity){
-        BookStore bookStore = null;
-        bookStore = bookStoreService.changeBookQuantity(bookId, bookQuantity);
-        ResponseDTO respDTO = new ResponseDTO("Change number of Books in the BookStore working ", bookStore);
+    @PutMapping("/updateQty")
+    public ResponseEntity<ResponseDTO> changeBookQuantity(@RequestBody ChangeBookQtyDTO changeBookQtyDTO){
+        BookData bookStore = null;
+        //System.out.println("Inside controller update ");
+        bookStore = bookStoreService.changeBookQuantity(changeBookQtyDTO);
+        ResponseDTO respDTO = new ResponseDTO("Change quantity of a given Book in the BookStore working ", bookStore);
+        ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * Method to change the price of a given book in the book store
+     */
+    @PutMapping("/updatePrice")
+    public ResponseEntity<ResponseDTO> changeBookPrice(@RequestBody ChangeBookPriceDTO changeBookPriceDTO){
+        BookData bookData = null;
+        System.out.println("Inside controller update ");
+        bookData = bookStoreService.changeBookPrice(changeBookPriceDTO);
+        ResponseDTO respDTO = new ResponseDTO("Change price of a Book in the BookStore working ", bookData);
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
         return responseEntity;
     }

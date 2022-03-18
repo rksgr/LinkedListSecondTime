@@ -1,6 +1,6 @@
 package com.example.bookstorebackend.repository;
 import com.example.bookstorebackend.dto.BookStoreDTO;
-import com.example.bookstorebackend.entity.BookStore;
+import com.example.bookstorebackend.entity.BookData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,13 +8,13 @@ import java.util.Optional;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<BookStore,Integer> {
+public interface BookRepository extends JpaRepository<BookData,Integer> {
 
-    List<BookStore> findAll();
+    List<BookData> findAll();
 
-    Optional<BookStore> findById(Integer bookId);
+    Optional<BookData> findById(Integer bookId);
 
-    BookStore save(BookStoreDTO bookStoreDTO);
+    BookData save(BookStoreDTO bookStoreDTO);
 
     void  deleteById(Integer bookId);
 }

@@ -1,18 +1,27 @@
 package com.example.bookstorebackend.service;
 
 import com.example.bookstorebackend.dto.RegisterDTO;
+import com.example.bookstorebackend.dto.ResetPasswordDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
 import com.example.bookstorebackend.dto.VerifyUser;
 import com.example.bookstorebackend.entity.JwtRequest;
 import com.example.bookstorebackend.entity.UserData;
+import com.example.bookstorebackend.exception.InvalidTokenException;
+import com.example.bookstorebackend.exception.UserNotFoundException;
 import com.example.bookstorebackend.repository.UserDataRepository;
 import com.example.bookstorebackend.util.EmailSenderUtil;
+import com.example.bookstorebackend.util.JwtUtil;
 import com.example.bookstorebackend.util.OtpGenerationUtil;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+
+/**
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
+ */
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomUserDataService implements ICustomUserDataService, UserDetailsService {
+public class CustomUserDataService implements ICustomUserDataService {
 
     @Autowired
     public UserDataRepository userDataRepository;
@@ -31,17 +40,8 @@ public class CustomUserDataService implements ICustomUserDataService, UserDetail
     @Autowired
     public EmailSenderUtil emailSenderUtil;
 
-    @Override
-    public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
-        UserData userData = null;
-        if(userDataRepository.findByEmailId(emailId) != null){
-            userData =userDataRepository.findByEmailId(emailId);
-            return new User(emailId, userData.getPassword(),new ArrayList<>());
-        }
-        else{
-            throw new UsernameNotFoundException("User with username "+ emailId + " not found");
-        }
-    }
+    @Autowired
+    public JwtUtil jwtUtil;
 
     @Override
     public List<UserData> getAllUserData() {
@@ -59,7 +59,7 @@ public class CustomUserDataService implements ICustomUserDataService, UserDetail
         // check if this user already exists in database
         userDataRepository.save(userData);
 
-        // String token = myToken.createToken(user.getUser_id());
+        //String token = myToken.createToken(user.getUser_id());
 
         // Generate otp and send it to the registered email
         int otp = otpGenerationUtil.generateOTP(registerDTO.emailId);
@@ -86,12 +86,16 @@ public class CustomUserDataService implements ICustomUserDataService, UserDetail
     @Override
     public ResponseDTO verifyUserCredential(VerifyUser verifyUser) {
         UserData userData = null;
+        System.out.println("Inside service class method verifyUserCredentials.");
         // The user details are already present in the database
         userData = userDataRepository.findByEmailId(verifyUser.getEmailId());
-
+        System.out.println("Inside service class method verifyUserCredentials." + verifyUser.getEmailId());
         if(userData != null){
             // OTP stored in cache(LHS) should match with OTP passed in request body (RHS)
+            System.out.println("Inside service class method verifyUserCredentials ---- user data not null ");
+
             if(otpGenerationUtil.getOTP(verifyUser.getEmailId()) == verifyUser.getOtp()){
+                System.out.println("Inside service class method verifyUserCredentials ---- user data not null -- otp verified");
                 userData.setVerify(true);
                 userDataRepository.save(userData);
                 return new ResponseDTO("User Verified Successfully",userData);
@@ -119,5 +123,48 @@ public class CustomUserDataService implements ICustomUserDataService, UserDetail
         UserData userData = null;
         userData = userDataRepository.findByEmailId(emailId);
         return userData;
+    }
+
+    // Sends the password to the email id of the user
+    @Override
+    public ResponseDTO forgotPassword(String emailId) {
+        UserData userData = null;
+        userData = userDataRepository.findByEmailId(emailId);
+
+        if (userData == null){
+            String msg = "The given emailId entered is not registered.";
+            return new ResponseDTO(msg,null);
+        }
+        else if (userData != null){
+            String pwd = userData.getPassword();
+            emailSenderUtil.sendOTPMessage("r_kjha@yahoo.com",
+                                            "Your password is ", pwd);
+            String msg = "Your password has been sent to your registered emailId"+ emailId;
+            return new ResponseDTO(msg,null);
+        }
+        return null;
+    }
+
+    @SneakyThrows
+    @Override
+    public ResponseDTO resetPassword(String token, String PwdNew) {
+        String emailId = jwtUtil.decodeToken(token);
+        if(emailId == null ){
+            throw new InvalidTokenException("The given token is NOT valid!");
+        }
+        else if(emailId != null){
+            UserData userData = userDataRepository.findByEmailId(emailId);
+
+            if (userData == null){
+                throw new UserNotFoundException("The given user is NOT registered!");
+            }
+            else if(userData != null){
+                userData.setPassword(PwdNew);
+                userDataRepository.save(userData);
+                return new ResponseDTO("Password has been updated successfully for ",
+                        userData.getFirstName()+ " "+ userData.getLastName() + "!");
+            }
+        }
+        return null;
     }
 }

@@ -1,20 +1,24 @@
 package com.example.bookstorebackend.service;
 
 import com.example.bookstorebackend.dto.BookStoreDTO;
-import com.example.bookstorebackend.entity.BookStore;
-import org.springframework.http.RequestEntity;
+import com.example.bookstorebackend.dto.ChangeBookPriceDTO;
+import com.example.bookstorebackend.dto.ChangeBookQtyDTO;
+import com.example.bookstorebackend.entity.BookData;
 
 import java.util.List;
 
 public interface IBookStoreService {
 
-    List<BookStore> getAllBooks();
+    List<BookData> getAllBooks();
 
-    BookStore getBookById(int bookId);
+    BookData getBookById(int bookId);
 
     void deleteBookById(int bookId);
 
-    BookStore addBookToStore(BookStoreDTO bookStoreDTO);
+    BookData addBookToStore(BookStoreDTO bookStoreDTO);
 
-    BookStore changeBookQuantity(int bookId, int bookQuantity);
+    BookData changeBookQuantity(ChangeBookQtyDTO changeBookQtyDTO);
+
+    // Change the quantity of given book in the store
+    BookData changeBookPrice(ChangeBookPriceDTO changeBookPriceDTO);
 }

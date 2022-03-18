@@ -2,17 +2,17 @@ package com.example.bookstorebackend.controller;
 
 
 import com.example.bookstorebackend.dto.RegisterDTO;
+//import com.example.bookstorebackend.dto.ResetPasswordDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
 import com.example.bookstorebackend.dto.VerifyUser;
 import com.example.bookstorebackend.entity.JwtRequest;
 import com.example.bookstorebackend.entity.UserData;
-import com.example.bookstorebackend.service.CustomUserDataService;
+//import com.example.bookstorebackend.service.CustomUserDataService;
 import com.example.bookstorebackend.service.ICustomUserDataService;
-import com.example.bookstorebackend.util.JwtUtil;
+//import com.example.bookstorebackend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,17 +21,8 @@ import java.util.List;
 public class UserController {
 // user's email id is taken as the username
 
-    //@Autowired
-    //private AuthenticationManager authenticationManager;
-
     @Autowired
     private ICustomUserDataService userDataService;
-
-    @Autowired
-    private CustomUserDataService customUserDataService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     /**
      * Fetch the details of all the users
@@ -69,6 +60,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO> registerNewUser(@RequestBody RegisterDTO registerDTO)
     {
         UserData userData = null;
+        System.out.println("Inside controller");
         userData = userDataService.registerNewUser(registerDTO);
         ResponseDTO responseDTO = new ResponseDTO(" New User Registration Success ", userData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
@@ -118,6 +110,21 @@ public class UserController {
     {
         userDataService.deleteUserByEmailId(emailId);
         ResponseDTO responseDTO = new ResponseDTO("Delete user details call success of user with email id ", emailId);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping("/forgotPassword")
+    public ResponseEntity<ResponseDTO> forgotPassword(@RequestParam String emailId){
+        ResponseDTO responseDTO = null;
+        responseDTO = userDataService.forgotPassword(emailId);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping("/resetPassword")
+    public ResponseEntity<ResponseDTO> resetPassword(@PathVariable ("/token") String token,
+                                                        @PathVariable("/PwdNew") String PwdNew){
+        ResponseDTO responseDTO = null;
+        responseDTO = userDataService.resetPassword(token,PwdNew);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 }

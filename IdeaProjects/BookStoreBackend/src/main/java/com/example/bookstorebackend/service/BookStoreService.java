@@ -1,20 +1,20 @@
 package com.example.bookstorebackend.service;
 
 import com.example.bookstorebackend.dto.BookStoreDTO;
-import com.example.bookstorebackend.entity.BookStore;
-import com.example.bookstorebackend.entity.JwtRequest;
+import com.example.bookstorebackend.dto.ChangeBookPriceDTO;
+import com.example.bookstorebackend.dto.ChangeBookQtyDTO;
+import com.example.bookstorebackend.entity.BookData;
 import com.example.bookstorebackend.exception.BookStoreException;
 import com.example.bookstorebackend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import java.util.List;
+/**
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
+ */
 
 @Service
 public class BookStoreService implements IBookStoreService {
@@ -22,18 +22,15 @@ public class BookStoreService implements IBookStoreService {
     @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    private BookRepository getBookRepository1;
-
     // Method to return all the books
     @Override
-    public List<BookStore> getAllBooks() {
+    public List<BookData> getAllBooks() {
         return bookRepository.findAll();
     }
 
     // Method to fetch book based on bookId
     @Override
-    public BookStore getBookById( int bookId) {
+    public BookData getBookById(int bookId) {
         return bookRepository
                 .findById(bookId)
                 .orElseThrow(()->new BookStoreException("Book with book id"+ bookId
@@ -48,14 +45,27 @@ public class BookStoreService implements IBookStoreService {
 
     // Method to add new book to the bookstore
     @Override
-    public BookStore addBookToStore(BookStoreDTO bookStoreDTO) {
-        BookStore bookStore = new BookStore(bookStoreDTO);
+    public BookData addBookToStore(BookStoreDTO bookStoreDTO) {
+        BookData bookStore = new BookData(bookStoreDTO);
         return bookRepository.save(bookStore);
     }
 
+    // Change the quantity of given book in the store
     @Override
-    public BookStore changeBookQuantity(int bookId, int bookQuantity) {
-        return null;
+    public BookData changeBookQuantity(ChangeBookQtyDTO changeBookQtyDTO) {
+        BookData bookData = getBookById(changeBookQtyDTO.bookId);
+        bookData.setBookQuantity(changeBookQtyDTO.bookQuantity);
+        bookRepository.save(bookData);
+        return bookData;
     }
 
+    // Change the quantity of given book in the store
+    @Override
+    public BookData changeBookPrice(ChangeBookPriceDTO changeBookPriceDTO) {
+        BookData bookData = getBookById(changeBookPriceDTO.bookId);
+        bookData.setBookPrice(changeBookPriceDTO.bookPrice);
+        bookRepository.save(bookData);
+        return bookData;
+    }
 }
+
