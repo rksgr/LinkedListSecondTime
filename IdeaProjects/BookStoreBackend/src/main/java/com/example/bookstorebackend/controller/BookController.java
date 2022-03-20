@@ -5,7 +5,9 @@ import com.example.bookstorebackend.dto.ChangeBookPriceDTO;
 import com.example.bookstorebackend.dto.ChangeBookQtyDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
 import com.example.bookstorebackend.entity.BookData;
+import com.example.bookstorebackend.exception.InvalidTokenException;
 import com.example.bookstorebackend.service.IBookStoreService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("bookstore")
+@CrossOrigin
 public class BookController {
 
     @Autowired
@@ -54,16 +57,33 @@ public class BookController {
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
         return responseEntity;
     }
+    /**
+     * Method to generate token to update the price or quantity of a given Book in the book store
+     */
+    @RequestMapping("/bookUpdateToken")
+    public ResponseEntity<ResponseDTO> updateBookTokenGen(@RequestParam("bookId") Integer bookId){
+        ResponseDTO respDTO = null;
+        System.out.println("Inside controller update book token gen ");
+        bookStoreService.updateBookTokenGen(bookId);
+        respDTO = new ResponseDTO("Token generation to update the price or quantity of a given Book in the book store ", null);
+        ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
+        return responseEntity;
+    }
+
 
     /**
      * Method to change the quantity of a given Book in the book store
      */
     @PutMapping("/updateQty")
     public ResponseEntity<ResponseDTO> changeBookQuantity(@RequestBody ChangeBookQtyDTO changeBookQtyDTO){
-        BookData bookStore = null;
+        ResponseDTO respDTO = null;
         //System.out.println("Inside controller update ");
-        bookStore = bookStoreService.changeBookQuantity(changeBookQtyDTO);
-        ResponseDTO respDTO = new ResponseDTO("Change quantity of a given Book in the BookStore working ", bookStore);
+        try {
+            respDTO = bookStoreService.changeBookQuantity(changeBookQtyDTO);
+        } catch (InvalidTokenException e) {
+            e.printStackTrace();
+        }
+
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
         return responseEntity;
     }
@@ -71,12 +91,13 @@ public class BookController {
     /**
      * Method to change the price of a given book in the book store
      */
+    @SneakyThrows
     @PutMapping("/updatePrice")
     public ResponseEntity<ResponseDTO> changeBookPrice(@RequestBody ChangeBookPriceDTO changeBookPriceDTO){
-        BookData bookData = null;
+        ResponseDTO respDTO = null;
         System.out.println("Inside controller update ");
-        bookData = bookStoreService.changeBookPrice(changeBookPriceDTO);
-        ResponseDTO respDTO = new ResponseDTO("Change price of a Book in the BookStore working ", bookData);
+        respDTO = bookStoreService.changeBookPrice(changeBookPriceDTO);
+
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
         return responseEntity;
     }

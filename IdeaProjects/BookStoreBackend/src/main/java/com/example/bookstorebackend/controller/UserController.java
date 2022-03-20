@@ -1,11 +1,8 @@
 package com.example.bookstorebackend.controller;
 
 
-import com.example.bookstorebackend.dto.RegisterDTO;
+import com.example.bookstorebackend.dto.*;
 //import com.example.bookstorebackend.dto.ResetPasswordDTO;
-import com.example.bookstorebackend.dto.ResponseDTO;
-import com.example.bookstorebackend.dto.VerifyUser;
-import com.example.bookstorebackend.entity.JwtRequest;
 import com.example.bookstorebackend.entity.UserData;
 //import com.example.bookstorebackend.service.CustomUserDataService;
 import com.example.bookstorebackend.service.ICustomUserDataService;
@@ -18,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userservice")
+@CrossOrigin
 public class UserController {
 // user's email id is taken as the username
 
@@ -68,15 +66,15 @@ public class UserController {
 
     /**
      * Login to the Bookstore application using email as username and password
-     * @param jwtRequest
+     * @param userLoginDTO
      * @return Navigation to the Bookstore home page on success
      */
     @RequestMapping("/login")
-    public ResponseEntity<ResponseDTO> loginUser(@RequestBody JwtRequest jwtRequest)
+    public ResponseEntity<ResponseDTO> loginUser(@RequestBody UserLoginDTO userLoginDTO)
     {
         UserData userData = null;
         ResponseDTO responseDTO = null;
-        userData = userDataService.loginUser(jwtRequest);
+        userData = userDataService.loginUser(userLoginDTO);
         if (userData != null)
         {
             responseDTO = new ResponseDTO(" User Login Success ", userData);
@@ -114,17 +112,17 @@ public class UserController {
     }
 
     @RequestMapping("/forgotPassword")
-    public ResponseEntity<ResponseDTO> forgotPassword(@RequestParam String emailId){
+    public ResponseEntity<ResponseDTO> forgotPassword(@RequestParam("emailId") String emailId){
         ResponseDTO responseDTO = null;
         responseDTO = userDataService.forgotPassword(emailId);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @RequestMapping("/resetPassword")
-    public ResponseEntity<ResponseDTO> resetPassword(@PathVariable ("/token") String token,
-                                                        @PathVariable("/PwdNew") String PwdNew){
+    @PutMapping("/resetPassword")
+    public ResponseEntity<ResponseDTO> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO){
         ResponseDTO responseDTO = null;
-        responseDTO = userDataService.resetPassword(token,PwdNew);
+        responseDTO = userDataService.resetPassword(resetPasswordDTO.getJwtToken(),
+                                                    resetPasswordDTO.getNewPasswrd());
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 }

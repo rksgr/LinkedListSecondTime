@@ -9,7 +9,7 @@ import lombok.ToString;
 public @ToString
 class ChangeBookPriceDTO {
 
-    // String token;
+    private String token;
     public int bookId;
     public Double bookPrice;
 }

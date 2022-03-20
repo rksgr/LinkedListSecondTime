@@ -1,16 +1,15 @@
 package com.example.bookstorebackend.service;
 
 import com.example.bookstorebackend.dto.RegisterDTO;
-import com.example.bookstorebackend.dto.ResetPasswordDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
+import com.example.bookstorebackend.dto.UserLoginDTO;
 import com.example.bookstorebackend.dto.VerifyUser;
-import com.example.bookstorebackend.entity.JwtRequest;
 import com.example.bookstorebackend.entity.UserData;
 import com.example.bookstorebackend.exception.InvalidTokenException;
 import com.example.bookstorebackend.exception.UserNotFoundException;
 import com.example.bookstorebackend.repository.UserDataRepository;
 import com.example.bookstorebackend.util.EmailSenderUtil;
-import com.example.bookstorebackend.util.JwtUtil;
+import com.example.bookstorebackend.util.JwtTokenUtil;
 import com.example.bookstorebackend.util.OtpGenerationUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.security.web.csrf.InvalidCsrfTokenException;
  */
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +39,7 @@ public class CustomUserDataService implements ICustomUserDataService {
     public EmailSenderUtil emailSenderUtil;
 
     @Autowired
-    public JwtUtil jwtUtil;
+    public JwtTokenUtil jwtTokenUtil;
 
     @Override
     public List<UserData> getAllUserData() {
@@ -49,7 +47,7 @@ public class CustomUserDataService implements ICustomUserDataService {
         return userDataRepository.findAll();
     }
 
-    // For registration of a user, using certain inputs as credential
+    // For registration of a new user, using certain inputs as credential
     @Override
     public UserData registerNewUser(RegisterDTO registerDTO){
         System.out.println("Inside service class --- register new user");
@@ -59,22 +57,20 @@ public class CustomUserDataService implements ICustomUserDataService {
         // check if this user already exists in database
         userDataRepository.save(userData);
 
-        //String token = myToken.createToken(user.getUser_id());
-
         // Generate otp and send it to the registered email
         int otp = otpGenerationUtil.generateOTP(registerDTO.emailId);
-        emailSenderUtil.sendOTPMessage(registerDTO.emailId, "Registration OTP","Token = " +
-                "Your OTP = "+otp);
+        emailSenderUtil.sendMail(registerDTO.emailId, "Registration OTP",
+                                    "Your OTP = "+otp);
         System.out.println("Registered the new user: " + userData.toString());
         return userDataRepository.save(userData);
     }
 
     // For login of a user, using email and password as the credentials
     @Override
-    public UserData loginUser(JwtRequest jwtRequest){
+    public UserData loginUser(UserLoginDTO userLoginDTO){
         // Match email and password
-        String email = jwtRequest.emailId;
-        String password = jwtRequest.password;
+        String email = userLoginDTO.emailId;
+        String password = userLoginDTO.password;
 
         System.out.println("username(email): "+ email+" password: "+ password);
         // load username and password here and do authentication
@@ -125,41 +121,47 @@ public class CustomUserDataService implements ICustomUserDataService {
         return userData;
     }
 
-    // Sends the password to the email id of the user
+    // Sends a token to the email id of the user, that token will be used to reset the password
+    // so forgot password page has email id as input field, then it navigates to reset password field
+    //
     @Override
     public ResponseDTO forgotPassword(String emailId) {
         UserData userData = null;
         userData = userDataRepository.findByEmailId(emailId);
 
         if (userData == null){
-            String msg = "The given emailId entered is not registered.";
+            String msg = "The given emailId entered is NOT registered!";
             return new ResponseDTO(msg,null);
         }
         else if (userData != null){
-            String pwd = userData.getPassword();
-            emailSenderUtil.sendOTPMessage("r_kjha@yahoo.com",
-                                            "Your password is ", pwd);
-            String msg = "Your password has been sent to your registered emailId"+ emailId;
+
+            String token = jwtTokenUtil.generateEmailBasedToken(emailId);
+            emailSenderUtil.sendMail("r_kjha@yahoo.com",
+                                            "Your token to reset Password ", token);
+            String msg = "Your token has been sent to your registered emailId "+ emailId
+                        + ". Kindly use your token to reset your password."
+                        + " It will expire in 10 Minutes!";
             return new ResponseDTO(msg,null);
         }
         return null;
     }
 
+    // Reset the password after verification of the token and new password as input
     @SneakyThrows
     @Override
-    public ResponseDTO resetPassword(String token, String PwdNew) {
-        String emailId = jwtUtil.decodeToken(token);
-        if(emailId == null ){
+    public ResponseDTO resetPassword(String token, String pwdNew) {
+        String emailId = jwtTokenUtil.decodeEmailBasedToken(token);
+        if(emailId == null){
             throw new InvalidTokenException("The given token is NOT valid!");
         }
-        else if(emailId != null){
+        else {
             UserData userData = userDataRepository.findByEmailId(emailId);
-
+            //Optional<UserData> userDataOptional = userDataRepository.findByEmailId(emailId);
             if (userData == null){
                 throw new UserNotFoundException("The given user is NOT registered!");
             }
             else if(userData != null){
-                userData.setPassword(PwdNew);
+                userData.setPassword(pwdNew);
                 userDataRepository.save(userData);
                 return new ResponseDTO("Password has been updated successfully for ",
                         userData.getFirstName()+ " "+ userData.getLastName() + "!");

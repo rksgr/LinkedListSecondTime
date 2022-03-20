@@ -1,12 +1,12 @@
-package com.example.bookstorebackend.entity;
+package com.example.bookstorebackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
-@NoArgsConstructor
 @AllArgsConstructor
-public @Data class JwtRequest {
+@NoArgsConstructor
+public @Data class UserLoginDTO {
 
     public String emailId;
     public String password;

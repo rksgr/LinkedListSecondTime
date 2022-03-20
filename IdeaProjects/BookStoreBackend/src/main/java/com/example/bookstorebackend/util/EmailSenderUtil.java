@@ -22,7 +22,7 @@ public class EmailSenderUtil {
     private JavaMailSender mailSender;
 
     // Method to send a simple mail containing otp
-    public void sendOTPMessage(String toEmail,
+    public void sendMail(String toEmail,
                                String subject,
                                String message){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
