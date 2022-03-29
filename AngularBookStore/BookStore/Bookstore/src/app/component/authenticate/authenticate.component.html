@@ -1,0 +1,28 @@
+<header>
+    <div class="navbar">
+        <img src="/Bookstore/src/assets/images/education.png" style="margin-left: 30px;">
+        <a class="active" href="#">BOOK STORE</a>
+      </div>
+</header> 
+<body>
+    <form [formGroup]="verifyUser">
+    <div class="d-flex justify-content-center align-items-center container">
+        <div class="card py-5 px-3">
+            <h1 class="m-0 head">EMAIL-ID VERIFICATION</h1><span class="mobile-text">Enter the code we just send on your email Id <b class="text-danger">{{email}}</b></span>
+            <div class="d-flex flex-row mt-5 otp">
+                <input type="text" class="form-control" autofocus="" formControlName="d1">
+                <input type="text" class="form-control" formControlName="d2">
+                <input type="text" class="form-control" formControlName="d3">
+                <input type="text" class="form-control" formControlName="d4">
+                <input type="text" class="form-control" formControlName="d5">
+                <input type="text" class="form-control" formControlName="d6" (change) = "verify()">
+            </div>
+            <div class="text-center mt-5" style="margin-bottom: 20px;">
+                <span class="d-block mobile-text">Don't receive the code?</span>
+                <span class="font-weight-bold text-danger cursor">Resend</span>
+            </div>
+        </div>
+    </div>
+    </form>
+    </body>
+
