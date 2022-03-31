@@ -17,7 +17,7 @@ import java.util.Date;
 public class JwtTokenUtil {
 
     private static final String SECRET_KEY = "secretkey";
-
+/**
     // Method to generate token containing emailId as claim and using HMAC512 algorithm
     public String generateEmailBasedToken(String emailId) {
         //String claim= emailId;
@@ -37,8 +37,8 @@ public class JwtTokenUtil {
         }
         return null;
     }
-
-    public String generateIdBasedToken(Integer id) {
+*/
+    public String generateToken(Long id) {
 
         try {
             Algorithm algorithm = Algorithm.HMAC512(SECRET_KEY);
@@ -50,13 +50,12 @@ public class JwtTokenUtil {
             return jwtToken;
         } catch (JWTCreationException e) {
             e.printStackTrace();
-
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         return null;
     }
-
+/**
     // Returns the emailId extracted from the token
     public String decodeEmailBasedToken(String jwtToken) {
 
@@ -78,10 +77,10 @@ public class JwtTokenUtil {
         emailId = claim.asString();
         return emailId;
     }
+ */
 
-    public Integer decodeIdBasedToken(String jwtToken) {
-
-        Integer id;
+    public Long decodeToken(String jwtToken) {
+        Long userId;
         Verification verifyToken = null;
 
         try {
@@ -94,9 +93,9 @@ public class JwtTokenUtil {
 
         DecodedJWT decodedJwt = verifier.verify(jwtToken);
 
-        Claim claim = decodedJwt.getClaim("id");
+        Claim claim = decodedJwt.getClaim("userId");
 
-        id = claim.asInt();
-        return id;
+        userId = claim.asLong();
+        return userId;
     }
 }

@@ -7,6 +7,7 @@ import com.example.bookstorebackend.dto.VerifyUser;
 import com.example.bookstorebackend.entity.UserData;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICustomUserDataService {
     List<UserData> getAllUserData();
@@ -24,4 +25,6 @@ public interface ICustomUserDataService {
     ResponseDTO forgotPassword(String emailId);
 
     ResponseDTO resetPassword(String token, String newPasswrd);
+
+    Optional<UserData> getUserById(Long userId);
 }

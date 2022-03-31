@@ -42,9 +42,9 @@ public class BookStoreService implements IBookStoreService {
 
     // Method to fetch book based on bookId
     @Override
-    public BookData getBookById(int bookId) {
+    public BookData getBookById(Long bookId) {
         return bookRepository
-                .findById(bookId)
+                .findByBookId(bookId)
                 .orElseThrow(() -> new BookStoreException("Book with book id" + bookId
                         + "does not exist!"));
     }
@@ -61,10 +61,11 @@ public class BookStoreService implements IBookStoreService {
         BookData bookStore = new BookData(bookStoreDTO);
         return bookRepository.save(bookStore);
     }
+
     // Generate token and send to emailid in case of update quantity or price of book
     @Override
-    public void updateBookTokenGen(Integer bookId){
-        String token = jwtTokenUtil.generateIdBasedToken(bookId);
+    public void updateBookTokenGen(Long bookId){
+        String token = jwtTokenUtil.generateToken(bookId);
         emailSenderUtil.sendMail("r_kjha@yahoo.com",
                                 "Token to update quantity or price of Books",
                                 token);
@@ -75,7 +76,7 @@ public class BookStoreService implements IBookStoreService {
     @Override
     public ResponseDTO changeBookQuantity(ChangeBookQtyDTO changeBookQtyDTO) throws InvalidTokenException {
 
-        Integer bookId = jwtTokenUtil.decodeIdBasedToken(changeBookQtyDTO.getToken());
+        Long bookId = jwtTokenUtil.decodeToken(changeBookQtyDTO.getToken());
 
         System.out.println("Book Id  is=" + bookId);
 
@@ -85,7 +86,7 @@ public class BookStoreService implements IBookStoreService {
         }
         else if ( bookId != null) {
 
-            Optional<BookData> bookDataOptional = bookRepository.findById(bookId);
+            Optional<BookData> bookDataOptional = bookRepository.findByBookId(bookId);
             BookData bookData = bookDataOptional.get();
             // check if the book with given bookId exists in the bookstore
             if (bookData == null) {
@@ -106,13 +107,13 @@ public class BookStoreService implements IBookStoreService {
     public ResponseDTO changeBookPrice(ChangeBookPriceDTO changeBookPriceDTO) throws InvalidTokenException {
 
         // check validity of token
-        Integer bookId = jwtTokenUtil.decodeIdBasedToken(changeBookPriceDTO.getToken());
+        Long bookId = jwtTokenUtil.decodeToken(changeBookPriceDTO.getToken());
         if ( bookId == null) {
             throw new InvalidTokenException("The given token is invalid!");
         } else if ( bookId != null) {
 
             // Check if the Book with given bookId exists in the bookstore
-            Optional<BookData> bookDataOptional = bookRepository.findById(bookId);
+            Optional<BookData> bookDataOptional = bookRepository.findByBookId(bookId);
             BookData bookData = bookDataOptional.get();
             if (bookData == null) {
                 throw new BookStoreException("The book with Book Id " + changeBookPriceDTO.bookId

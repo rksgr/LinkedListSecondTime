@@ -13,13 +13,13 @@ public interface IBookStoreService {
 
     List<BookData> getAllBooks();
 
-    BookData getBookById(int bookId);
+    BookData getBookById(Long bookId);
 
     void deleteBookById(int bookId);
 
     BookData addBookToStore(BookStoreDTO bookStoreDTO);
 
-    void updateBookTokenGen(Integer bookId);
+    void updateBookTokenGen(Long bookId);
 
     ResponseDTO changeBookQuantity(ChangeBookQtyDTO changeBookQtyDTO) throws InvalidTokenException;
 

@@ -39,7 +39,7 @@ public class BookController {
      * @return
      */
     @RequestMapping("/getById/{bookId}")
-    public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") int bookId){
+    public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") Long bookId){
         ResponseDTO respDTO = new ResponseDTO("Get Book by BookId working "
                                                 ,bookStoreService.getBookById(bookId));
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
@@ -61,7 +61,7 @@ public class BookController {
      * Method to generate token to update the price or quantity of a given Book in the book store
      */
     @RequestMapping("/bookUpdateToken")
-    public ResponseEntity<ResponseDTO> updateBookTokenGen(@RequestParam("bookId") Integer bookId){
+    public ResponseEntity<ResponseDTO> updateBookTokenGen(@RequestParam("bookId") Long bookId){
         ResponseDTO respDTO = null;
         System.out.println("Inside controller update book token gen ");
         bookStoreService.updateBookTokenGen(bookId);
@@ -69,7 +69,6 @@ public class BookController {
         ResponseEntity responseEntity = new ResponseEntity(respDTO, HttpStatus.OK);
         return responseEntity;
     }
-
 
     /**
      * Method to change the quantity of a given Book in the book store

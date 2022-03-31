@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/userservice")
@@ -48,6 +49,21 @@ public class UserController {
         ResponseDTO responseDTO = new ResponseDTO("Get user by email Id call success", userData);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
+
+    /**
+     *  Fetch the details of a user with a given userId
+     * @return userdata
+     */
+    @RequestMapping(value = {"/getByUserId/{userId}"})
+    public ResponseEntity<ResponseDTO> getUserById(@PathVariable("userId") Long userId)
+    {
+        Optional<UserData> userData = null;
+        System.out.println("Inside controller");
+        userData = userDataService.getUserById(userId);
+        ResponseDTO responseDTO = new ResponseDTO("Get user by user Id call success", userData);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+
 
     /**
      * Register a new user and enter the details into database

@@ -1,8 +1,6 @@
 package com.example.bookstorebackend.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.ToString;
-
 
 public @ToString class BookStoreDTO {
 

@@ -13,16 +13,7 @@ import com.example.bookstorebackend.util.JwtTokenUtil;
 import com.example.bookstorebackend.util.OtpGenerationUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-
-/**
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.csrf.InvalidCsrfTokenException;
- */
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -71,8 +62,6 @@ public class CustomUserDataService implements ICustomUserDataService {
         // Match email and password
         String email = userLoginDTO.emailId;
         String password = userLoginDTO.password;
-
-        System.out.println("username(email): "+ email+" password: "+ password);
         // load username and password here and do authentication
         // Once authentication is done we generate jwt token
         return userDataRepository.findByEmailIdAndPassword(email,password);
@@ -82,16 +71,12 @@ public class CustomUserDataService implements ICustomUserDataService {
     @Override
     public ResponseDTO verifyUserCredential(VerifyUser verifyUser) {
         UserData userData = null;
-        System.out.println("Inside service class method verifyUserCredentials.");
-        // The user details are already present in the database
+
         userData = userDataRepository.findByEmailId(verifyUser.getEmailId());
-        System.out.println("Inside service class method verifyUserCredentials." + verifyUser.getEmailId());
         if(userData != null){
             // OTP stored in cache(LHS) should match with OTP passed in request body (RHS)
-            System.out.println("Inside service class method verifyUserCredentials ---- user data not null ");
 
             if(otpGenerationUtil.getOTP(verifyUser.getEmailId()) == verifyUser.getOtp()){
-                System.out.println("Inside service class method verifyUserCredentials ---- user data not null -- otp verified");
                 userData.setVerify(true);
                 userDataRepository.save(userData);
                 return new ResponseDTO("User Verified Successfully",userData);
@@ -107,10 +92,9 @@ public class CustomUserDataService implements ICustomUserDataService {
         userData = userDataRepository.findByEmailId(emailId);
 
         if(userData != null){
-            System.out.println("The user exists");
             userDataRepository.delete(userData);
         }
-        System.out.println("The user does not exist");
+        //System.out.println("The user does not exist");
     }
 
     // Get the details of a user with a given email id
@@ -121,21 +105,24 @@ public class CustomUserDataService implements ICustomUserDataService {
         return userData;
     }
 
+    @Override
+    public Optional<UserData> getUserById(Long userId) {
+        Optional<UserData> userData = null;
+        userData = userDataRepository.findById(Math.toIntExact(userId));
+        return userData;
+    }
     // Sends a token to the email id of the user, that token will be used to reset the password
     // so forgot password page has email id as input field, then it navigates to reset password field
-    //
     @Override
     public ResponseDTO forgotPassword(String emailId) {
         UserData userData = null;
         userData = userDataRepository.findByEmailId(emailId);
-
         if (userData == null){
             String msg = "The given emailId entered is NOT registered!";
             return new ResponseDTO(msg,null);
         }
         else if (userData != null){
-
-            String token = jwtTokenUtil.generateEmailBasedToken(emailId);
+            String token = jwtTokenUtil.generateToken(userData.getUserId());
             emailSenderUtil.sendMail("r_kjha@yahoo.com",
                                             "Your token to reset Password ", token);
             String msg = "Your token has been sent to your registered emailId "+ emailId
@@ -150,13 +137,13 @@ public class CustomUserDataService implements ICustomUserDataService {
     @SneakyThrows
     @Override
     public ResponseDTO resetPassword(String token, String pwdNew) {
-        String emailId = jwtTokenUtil.decodeEmailBasedToken(token);
-        if(emailId == null){
+        Long userId = jwtTokenUtil.decodeToken(token);
+        if(userId == null){
             throw new InvalidTokenException("The given token is NOT valid!");
         }
         else {
-            UserData userData = userDataRepository.findByEmailId(emailId);
-            //Optional<UserData> userDataOptional = userDataRepository.findByEmailId(emailId);
+            UserData userData = userDataRepository.findById(Math.toIntExact(userId)).get();
+
             if (userData == null){
                 throw new UserNotFoundException("The given user is NOT registered!");
             }
