@@ -1,0 +1,30 @@
+<app-header></app-header>
+
+<div class="form-content">
+
+<!--<form class="form" [formGroup]="addBookToCartForm">-->
+    <form class="form">
+    <!--Display books -->
+    <div class="form-head" >You have ordered:</div>
+    <div>
+    
+    <!--Input Token -->
+    <mat-form-field class="example-full-width" appearance="fill">
+        <label class="label-text" for="token"> Book name</label>
+        <label class="label-text" for="token"> Book Image</label>
+        <label class="label-text" for="token"> Book price</label>
+        <label class="label-text" for="token"> Book id</label>
+        <br>
+        <label class="label-text" for="token"> Book quantity</label>
+        <mat-select>
+            <mat-option *ngFor="let quantity of quantities" [value]="quantity.value">
+              {{quantity.viewValue}}
+            </mat-option>
+        </mat-select>
+        <label class="label-text" for="token"> cancel</label>       
+        
+    </mat-form-field>
+    </div>
+
+    </form>
+    </div>

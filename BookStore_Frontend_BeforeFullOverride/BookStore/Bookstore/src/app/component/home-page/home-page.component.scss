@@ -1,0 +1,91 @@
+.header{
+    padding:15px 0;
+    background-color:#571919;
+    height:70px;
+}
+.content-header{
+    position: relative;
+    align-items:stretch;
+    border: 0px solid green;
+    color:antiquewhite;
+}
+.logo-content{
+    position:absolute;
+    top:20px;
+    left:25px;
+    justify-content:left;
+    align-items:center;
+    border: 0px solid green;
+}
+.cart-items{
+    color:rgb(233, 222, 222);
+}
+.cart-content{
+    position:absolute;
+    top:30px;
+    left: 1280px;
+    color:rgb(230, 225, 218);
+}
+.dropdown{
+    position: relative;
+    top:50px;
+    left:1290px;
+    width:190px;
+    height: 50px;
+}
+
+.cards-content{
+    position: relative;
+    margin-left: 30px;
+    margin-right:30px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    border:auto;
+    justify-content: center;
+}
+.welcome-message{
+    position:absolute;
+    top:20 px;
+    left: 400px;
+    font-size: xx-large;
+    color: rgb(238, 232, 232);
+    justify-content: space-between;
+}
+.sort{
+    justify-content: center;
+    color: aqua;
+}
+.form-img-control{
+    background:transparent;
+    opacity:1;
+    position: inherit;
+}
+.sort-option{
+    color:rgb(24, 20, 20);
+    text-align: center;
+    background-color: rgb(122, 76, 15);
+}
+.sort-option1{
+    color:rgb(27, 25, 25);
+    text-align: center;
+    background-color: aqua;
+}
+.badge-color{
+    color:rgb(214, 202, 202);
+}
+.row-content{
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right:30px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    border:auto;
+}
+.example-full-width{
+   
+    border: 10px;
+    margin: 10px;
+}
+.button-ctrl{
+    width: auto;
+}

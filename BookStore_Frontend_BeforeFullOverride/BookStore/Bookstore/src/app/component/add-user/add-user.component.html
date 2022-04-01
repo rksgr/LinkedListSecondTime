@@ -1,0 +1,67 @@
+<div class="form-content">
+    <form class="form" [formGroup]="addUserForm">
+    <div class="form-head">  New User Registration </div>
+        
+    <!--Input First Name -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="firstName">First Name</label>
+            <input matInput type="text" class="form-control" formControlName="firstName" >
+        </mat-form-field>
+    </div>
+
+    <!--Input Last Name -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <label class="label-text" for="lastName">Last Name</label>
+            <input matInput type="text" class="form-control" formControlName="lastName">
+        </mat-form-field>
+    </div>
+    
+    <div class="row-content">
+    <!-- Input Kyc (Phone number used as kyc here) -->
+    <mat-form-field class="example-full-width" appearance="outline">
+        <label class="label-text" for="kyc">Phone No</label>
+        <input matInput type="name" class="form-control" formControlName="kyc" >
+    </mat-form-field>
+    </div>
+
+    <!-----------Enter the Date of Birth------------->
+    <div class="row-content">
+        <label class="label text" for="dob">Date Of Birth</label>
+        <mat-form-field appearance="fill">
+            <mat-label>Choose a Date</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a Date" formControlName="dob">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+    </div>
+
+    <!--Input Email ID -->
+    <div class="row-content">
+    <mat-form-field class="example-full-width" appearance="outline">
+        <label class="label-text" for="emailId" >Email ID</label>
+        <input matInput type="name" class="form-control" formControlName="emailId">
+    </mat-form-field>
+    </div>
+    
+    <!--- Input Password -->
+    <div class="row-content">
+        <mat-form-field class="example-full-width" appearance="outline">
+        <label class="label-text" for="phone" >Password</label>
+        <input matInput type="password" class="form-control" formControlName="password">
+    </mat-form-field>
+    </div>
+
+
+    <div class="buttonParent">
+    <a routerLink="/home-page">
+        <button mat-raised-button color="accent" class="resetButton button cancelButton">Cancel</button>
+    </a>
+    <div class="submit-reset">
+        <button mat-raised-button type="submit" class="button submitButton" id="submitButton" (click)="onSubmit()" >Submit</button>
+        <button mat-raised-button color="accent" type="reset" class="resetButton button">Reset</button>
+    </div>
+    </div>
+    </form>
+</div>

@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<header class="header content-header">
+    <div class="logo-content">
+        <img src="../../../assets/images/education.png" alt="Logo Image">
+        <div>
+            <span class="content-header book-store">Bookstore</span>
+        </div>
+    </div>
+    <div>
+    <mat-label class="welcome-message" type="text" >Welcome to The Classic BookStore!</mat-label>
+    <br>
+    </div>
+    <div class="cart-content">
+        <div>
+           <!--- <span class="content-header cart-items">Cart</span>-->
+           <!-- <i class="fa fa-shopping-cart" aria-hidden="true"></i>-->
+    <mat-icon matBadge="10" matBadgeColor="warn">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+    </mat-icon>
+      <!-- Include text description of the icon's meaning for screen-readers -->
+      <span class="cdk-visually-hidden"></span>
+        </div>
+    </div>
+</header>
+
+<div class="dropdown" appearance="outline" alt="Sort By">
+        <mat-select class="sort-option">
+          <mat-option class="sort-option" value="option1">Sort by relevance</mat-option>
+          <mat-option class="sort-option" value="option2">Sort by price high to low</mat-option>
+          <mat-option class="sort-option" value="option3">Sort by price low to high</mat-option>
+        </mat-select>      
+</div>
+
+    <!--Display books -->
+    <div>
+
+    <div class="cards-content" *ngFor="let book of bookDetails">
+                                    
+                <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
+                <h3> {{book.bookName}} </h3>
+                <h4> {{book.bookDescription}} </h4>
+                <br>
+                <label class="label-text" for="book"> {{book.bookAuthor}}</label>
+                <br>
+                <label class="label-text" for="book"> </label>
+                <br>
+                <label class="label-text" for="book"> {{book.bookPrice}}</label>
+                <br>
+                <button class="button-ctrl" (click)="addToCart(book.bookId)">Add to Cart</button>
+
+    </div>
+    </div>
