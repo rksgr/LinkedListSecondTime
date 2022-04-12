@@ -1,0 +1,49 @@
+.container{
+    border: solid #A03037 1px;
+    justify-content: center;
+}
+.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    width: 51%;
+}
+
+.head{
+    font-family: emoji;
+    font-weight: bolder;
+    color: #A03037;
+}
+
+.button{
+    width: 51%;
+    padding: 15px;
+    background: transparent;
+    cursor: pointer;
+}
+.navbar {
+    width: 100%;
+    background-color: #A03037;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .navbar a {
+    float: left;
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 25px;
+    font-family: emoji;
+  }
+
+  .signup-button{
+    width: 51%;
+    height: 45px;
+    background: #A03037;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }

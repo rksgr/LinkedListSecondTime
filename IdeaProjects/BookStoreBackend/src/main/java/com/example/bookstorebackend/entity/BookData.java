@@ -1,6 +1,7 @@
 package com.example.bookstorebackend.entity;
 
 import com.example.bookstorebackend.dto.BookStoreDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name="bookstock")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public @Data class BookData {
 
     @Id

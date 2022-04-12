@@ -1,67 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup,Validators } from '@angular/forms';
+import { UserLogin } from 'src/app/model/user-login';
+import { HTTPService } from 'src/app/service/http.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-login-user',
   templateUrl: './login-user.component.html',
   styleUrls: ['./login-user.component.scss']
 })
 export class LoginUserComponent implements OnInit {
-  formGroup!: FormGroup;
- 
-  constructor(private userService: UserService, private router: Router) {}
-  
+
+public userLogin : UserLogin = new UserLogin();
+
+loginUserForm : FormGroup;
+
+  constructor(private formBuilder : FormBuilder,
+              private userService : UserService,
+              private router : Router) 
+  { 
+    this.loginUserForm = this.formBuilder.group({
+      emailId: new FormControl('',[Validators.required]),
+      password: new FormControl('', [Validators.required])
+    })
+    };
+//loginUserForm
   ngOnInit(): void {
-    const token = localStorage.getItem("token");
-    // if(token != null){
-    //   this.router.navigate(['home']);
-    // }
-    this.initForm();
   }
 
-  initForm(){
-    this.formGroup = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
-    })
-  }
-  
-/**
- * This function is used to login the user
- */
   onSubmit(){
-     this.userService.userLogin(this.formGroup.get("username")?.value, this.formGroup.get("password")?.value).subscribe(
-      data => {
-        
-        if(data.token != "try again"){
-          localStorage.setItem("token", data.token)
-        }else{
-          alert("Wrong Email Id or PassWord")
-        }
-        this.router.navigate(['/home']);
-      });  
-  }
-
-/* This is used to show and hide the forgot password form. */
-  forgotpass = false
-  onForgotPassword(){
-    this.forgotpass = !this.forgotpass
-  }
-
-/**
- * This function is called when the user clicks the "Verify" button. 
- * It calls the forgotPassword function of the userService. 
- * The forgotPassword function takes in the username and password entered by the user.
- */
-  onVerify(){
-    this.userService.forgotPassword(this.formGroup.get("username")?.value, this.formGroup.get("password")?.value)
-    .subscribe(data =>{
-      console.log("data ======>", data);
-      this.onForgotPassword()
-      this.ngOnInit()
-
-    })
+    this.userLogin = this.loginUserForm.value;
+    this.userService.loginUser(this.userLogin).subscribe(response=>{
+      console.log(response);
+    });
+    this.router.navigate(['/home-page']);
   }
 }

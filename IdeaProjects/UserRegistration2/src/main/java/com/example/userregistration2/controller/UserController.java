@@ -2,6 +2,7 @@ package com.example.userregistration2.controller;
 
 import com.example.userregistration2.DTO.RegisterDTO;
 import com.example.userregistration2.DTO.ResponseDTO;
+import com.example.userregistration2.config.BeforeAuthenticationFilter;
 import com.example.userregistration2.model.JwtRequest;
 import com.example.userregistration2.model.JwtResponse;
 import com.example.userregistration2.model.UserData;
@@ -16,10 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -39,6 +37,9 @@ public class UserController {
     private CustomUserDataService customUserDataService;
 
     @Autowired
+    private BeforeAuthenticationFilter authenticationFilter;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @RequestMapping(value = {"/get"})
@@ -48,6 +49,7 @@ public class UserController {
         //System.out.println("Inside controller class");
 
         userDataList = userDataService.getAllUserData();
+
         ResponseDTO responseDTO = new ResponseDTO("Get all user details call success", userDataList);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
@@ -58,16 +60,30 @@ public class UserController {
     {
         UserData userData = null;
         userData = userDataService.registerNewUser(registerDTO);
+        //authenticationFilter.attemptAuthentication()
+        ResponseDTO responseDTO = new ResponseDTO(" OTP registered ", userData);
+        return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+    }
+
+    // Registration of a new user
+    @PostMapping("/validateOTP/{otpId}/{otp}")
+    public ResponseEntity<ResponseDTO> validateOtp(@PathVariable("otpId") Integer otpId,
+                                                   @PathVariable("otp") String otp)
+    {
+        UserData userData = null;
+        userData = userDataService.validateOtp(otpId, otp);
+        //authenticationFilter.attemptAuthentication()
         ResponseDTO responseDTO = new ResponseDTO(" New User Registration Success ", userData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 
     // For the user to login using email as username and password
     @RequestMapping("/login")
-    public ResponseEntity<ResponseDTO> loginUser(@RequestBody JwtRequest jwtRequest)
+    public ResponseEntity<ResponseDTO> loginUser(@RequestBody JwtRequest jwtRequest) throws Exception
     {
         UserData userData = null;
         ResponseDTO responseDTO = null;
+        System.out.println("Inside controller -- login");
         userData = userDataService.loginUser(jwtRequest);
         if (userData != null)
         {

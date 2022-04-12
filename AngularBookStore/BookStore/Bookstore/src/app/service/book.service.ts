@@ -1,21 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Book } from '../../app/model/book';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
 
-  constructor(private http: HttpClient) { }
+  private bookSource = new BehaviorSubject(new Book());
+  currentEmployee = this.bookSource.asObservable();
+
+  private baseUrl: string = "http://localhost:8080/bookstore/";
+
+  constructor(private httpClient: HttpClient) { }
 
 /**
  * Get all books from the database
  * @returns An Observable of type Book[]
  */
-  getAllbooks(): Observable<Book[]>{
-    return this.http.get<Book[]>(`http://localhost:8080/book`);
+  /*getAllbooks(): Observable<httpResponse>{
+    return this.http.get<httpResponse>(`http://localhost:8080/bookstore/get`);
+  }*/
+  getAllbooks(): Observable<any> {
+    return this.httpClient.get(this.baseUrl + "get");
   }
 
 /**
@@ -24,7 +33,7 @@ export class BookService {
  * @returns An Observable of type Book[]
  */
   getBookById(book_id: number): Observable<any>{
-    return this.http.get<Book[]>(`http://localhost:8080/book/${book_id}`);
+    return this.httpClient.get<Book[]>(`http://localhost:8080/bookstore/get/${book_id}`);
   }
 
 /**
@@ -33,7 +42,7 @@ export class BookService {
  * @returns An Observable of type Book[]
  */
   getBookByName(book_name: String): Observable<any>{
-    return this.http.get<Book[]>(`http://localhost:8080/book/bookname/${book_name}`);
+    return this.httpClient.get<Book[]>(`http://localhost:8080/bookstore/bookname/${book_name}`);
   }
 
 /**
@@ -42,7 +51,7 @@ export class BookService {
  * @returns An Observable of type Book[]
  */
   sort(num: number): Observable<any>{
-    return this.http.get<Book[]>(`http://localhost:8080/book/sort/${num}`);
+    return this.httpClient.get<Book[]>(`http://localhost:8080/bookstore/sort/${num}`);
   }
 
 /**
@@ -56,7 +65,7 @@ export class BookService {
     const params = new HttpParams()
                 .set('book_id', book_id)
                 .set('quantity', quantity);
-    return this.http.post(`http://localhost:8080/book/changequantity/${token}`, params);
+    return this.httpClient.post(`http://localhost:8080/book/changequantity/${token}`, params);
   }
 
 }

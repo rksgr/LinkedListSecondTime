@@ -2,12 +2,17 @@ package com.example.bookstorebackend.controller;
 
 import com.example.bookstorebackend.dto.CartDTO;
 import com.example.bookstorebackend.dto.ResponseDTO;
+import com.example.bookstorebackend.entity.BookData;
+import com.example.bookstorebackend.entity.CartData;
 import com.example.bookstorebackend.service.IBookStoreService;
 import com.example.bookstorebackend.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cart")
@@ -34,12 +39,19 @@ public class CartController {
      * Method to get all the books present in the cart for the user
      * @return List of all the books in the cart
      */
-    @RequestMapping("/getforUser")
-    public ResponseEntity<ResponseDTO> getAllCartItemsForUser(){
-        System.out.println("Inside cart controller -- ");
-        ResponseDTO respDto = new ResponseDTO("Get All Cart items Method working"
-                ,cartService.getAllCartItemsForUser());
-        ResponseEntity responseEntity = new ResponseEntity(respDto, HttpStatus.OK);
+    @RequestMapping("/getBookList/{token}")
+    public ResponseEntity<ResponseDTO> getAllBooksInCartsForUser(@PathVariable("token") String token){
+        //System.out.println("Inside cart controller -- getAllBooksInCartsForUser method. ");
+        List<BookData> bookDataList = new ArrayList<>();
+        bookDataList = cartService.getAllCartItemsForUser(token);
+        //System.out.println("cartlist size: "+cartList.size());
+
+
+        System.out.println("bookList size: "+ bookDataList.size());
+
+        ResponseDTO respDto = new ResponseDTO("Get All Books in cart Method working"
+                ,bookDataList);
+        ResponseEntity responseEntity = new ResponseEntity(respDto,HttpStatus.OK);
         return responseEntity;
     }
 
@@ -52,6 +64,7 @@ public class CartController {
         System.out.println("Inside cart controller -- add to cart");
         ResponseDTO respDto = new ResponseDTO("Get All Cart items Method working"
                 ,cartService.addToCart(cartDTO));
+        System.out.println("Iside cart controlelr: userid is "+ cartDTO.userId);
         ResponseEntity responseEntity = new ResponseEntity(respDto, HttpStatus.OK);
         return responseEntity;
     }

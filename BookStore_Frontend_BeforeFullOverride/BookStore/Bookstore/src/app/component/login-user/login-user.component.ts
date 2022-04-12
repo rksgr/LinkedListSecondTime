@@ -27,13 +27,20 @@ loginUserForm : FormGroup;
     };
 //loginUserForm
   ngOnInit(): void {
+    const token = localStorage.getItem("token");
   }
 
   onSubmit(){
     this.userLogin = this.loginUserForm.value;
     this.userService.loginUser(this.userLogin).subscribe(response=>{
-      console.log(response);
-    });
-    this.router.navigate(['/home-page']);
+
+      if (response.message == "User Login Success!"){
+        localStorage.setItem("token",response.data);
+        console.log(response.data);
+        this.router.navigate(['/home-page']);
+      }else{
+        alert(" The email id and password combination is not correct.")
+      }
+    });                                                                     
   }
 }

@@ -11,22 +11,23 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class JwtController {
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private CustomUserDataService customUserDataService;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping(value="/generateToken")
+    @Autowired
+    private CustomUserDataService customUserDataService;
+    @RequestMapping("/generateToken")
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println(jwtRequest);
 
@@ -46,6 +47,8 @@ public class JwtController {
         }
         // final area
         UserDetails userDetails = this.customUserDataService.loadUserByUsername(jwtRequest.getEmail());
+
+        // call generate token method
         String token = this.jwtUtil.generateToken(userDetails);
         System.out.println("Java web token: "+ token);
 
@@ -53,4 +56,3 @@ public class JwtController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 }
-

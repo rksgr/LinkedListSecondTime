@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { BookService } from 'src/app/service/book.service';
 import { CartService } from 'src/app/service/cart.service';
 import { OrderService } from 'src/app/service/order.service';
-
+import { Book } from 'src/app/model/book';
 
 @Component({
   selector: 'app-cart',
@@ -15,20 +15,22 @@ export class CartComponent implements OnInit {
   formGroup !: FormGroup;
   type= ""
   totalPrice = 0;
-  bookIdLIst:number[] = []
+  bookIdLIst : Book[] = [];
   orderId = 0;
   bookQuantity = 1;
- 
- 
 
   carts!:any;
-  constructor(private bookService: BookService, private cartService: CartService, private formBuilder: FormBuilder, private orderService: OrderService) {}
+  constructor(private bookService: BookService, 
+              private cartService: CartService, 
+              private formBuilder: FormBuilder, 
+              private orderService: OrderService) {}
   
   token = localStorage.getItem("token") || "";
   
   ngOnInit(): void {
     this.getBookIdLIst();
-    this.onReload();
+    //this.onReload();
+    console.log("inside ngon init()");
     // this.initForm();
   }
 
@@ -36,8 +38,12 @@ export class CartComponent implements OnInit {
  * This function is used to get all the book id's from the cart
  */
   getBookIdLIst(){
+    console.log("inside getBookIdList method");
     this.cartService.getAllCartBookId(localStorage.getItem("token") || "").subscribe(data => {
-      this.bookIdLIst = data;
+      console.log("inside getBookIdLIst() method--- kuchh to hua hai!");
+      this.bookIdLIst = data.data;
+      //console.log(this.bookIdLIst.cart.userId);
+      console.log("carts: "+ this.carts)
     })
   }
 
@@ -78,6 +84,7 @@ export class CartComponent implements OnInit {
  * The array of carts is assigned to the carts property
  */
   onReload(){
+    console.log("inside onReload() method");
     this.cartService.getAllCarts(this.token).subscribe(data => {this.carts = data})
   }
 

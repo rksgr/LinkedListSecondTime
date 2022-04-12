@@ -4,7 +4,6 @@ import org.junit.Test;
 
 public class MyNodeTest {
 
-
     // UC1: create a linked list containing 56, 30 and 70 as elements
     @Test
     public void given3NumbersWhenLinkedShouldPassLinkedListTest(){

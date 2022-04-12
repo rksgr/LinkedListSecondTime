@@ -14,7 +14,7 @@ public interface ICustomUserDataService {
 
     UserData registerNewUser(RegisterDTO registerDTO);
 
-    UserData loginUser(UserLoginDTO userLoginDTO);
+    ResponseDTO loginUser(UserLoginDTO userLoginDTO);
 
     ResponseDTO verifyUserCredential(VerifyUser verifyUser);
 

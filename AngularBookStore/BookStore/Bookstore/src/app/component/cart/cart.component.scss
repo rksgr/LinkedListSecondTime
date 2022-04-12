@@ -1,118 +1,39 @@
-.navbar>.container, .navbar>.container-fluid, .navbar>.container-lg, .navbar>.container-md, .navbar>.container-sm, .navbar>.container-xl, .navbar>.container-xxl {
-    display: flex;
-    flex-wrap: inherit;
-    align-items: center;
-    width: 76%;
-    justify-content:left;
- }
-
- .container{
-    border: #A03037 solid 1px;
-    margin-top: 10px;
-    width: 75%;
-    margin-left: 13%;
- }
-
- .main-content{
-     display: flex;
-     flex-wrap: wrap;
- }
-
- .logo{
-    width: 100px;
-    height: 135px;
-
- }
-
- .bt{
-    border-radius: 6px;
-    background-color: white;
-    border: #A03037 solid 0.1px;
-    color: #A03037;
-    cursor: pointer;
- }
-
-.customer-content{
-    width: 60%;
-    justify-content: space-between;
+.form-head{
+    display:flex;
+    justify-content: left;
+    margin: auto;
 }
-
-.mat-radio-button ~ .mat-radio-button {
-    margin-left: 106px;
-  }
-
-.mat-form-field {
-    display: inline-block;
-    position: relative;
-    text-align: left;
-    width: 25%;
+.sort{
+    margin-inline-end: 5px;
+    color: aqua;
 }
-
-.llogo{
-    width: 20px;
-    height: 21px;
-    background-image: url("/Bookstore/src/assets/images/supermarket.png");
+.form-img-control{
+    background:transparent;
+    opacity:1;
 }
-
-.navbar {
-    width: 100%;
-    background-color: #A03037;
-    overflow: auto;
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .navbar a {
-    float: left;
-    padding: 12px;
-    color: white;
-    text-decoration: none;
-    font-size: 25px;
-    font-family: emoji;
-  }
-
-.cart-head{
+.sort-option{
+    color:black;
     text-align: center;
-    font-family: emoji;
-    font-weight: 600;
-    color: #A03037;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    background-color: aqua;
 }
-
-.book-name{
-    font-family: emoji;
-    font-size: 18px;
-    font-weight: 600;
+.sort-option1{
+    color:white;
+    text-align: center;
+    background-color: aqua;
 }
-
-.book-author{
-    font-family: emoji;
-    font-size: 13px;
+.row-content{
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right:30px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    border:auto;
 }
-
-.book-price{
-    font-family: emoji;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.order{
-    background: #A03037;
-    color: white;
-    padding: 5px 5px;
-    border: 1px solid #9D9D9D;
-    border-radius: 5px;
+.example-full-width{
+   
+    border: 10px;
     margin: 10px;
-    cursor: pointer;
-    margin-left: 60%;
-    width: 11%;
-    height: 40px;
 }
-
-.sub-head{
-    font-family: emoji;
-    font-weight: 600;
-    color: #A03037;
-    font-size: 20px;
+.button-ctrl{
+    width: auto;
 }

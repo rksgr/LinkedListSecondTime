@@ -58,13 +58,18 @@ public class CustomUserDataService implements ICustomUserDataService {
 
     // For login of a user, using email and password as the credentials
     @Override
-    public UserData loginUser(UserLoginDTO userLoginDTO){
+    public ResponseDTO loginUser(UserLoginDTO userLoginDTO){
         // Match email and password
         String email = userLoginDTO.emailId;
         String password = userLoginDTO.password;
         // load username and password here and do authentication
         // Once authentication is done we generate jwt token
-        return userDataRepository.findByEmailIdAndPassword(email,password);
+        Optional<UserData> userData = userDataRepository.findByEmailIdAndPassword(email,password);
+        if(userData.isPresent()){
+            String token = jwtTokenUtil.generateToken(userData.get().getUserId());
+            return new ResponseDTO("User Login Success!",token);
+        }
+        return new ResponseDTO("User Login Unsuccessful!", "You need to try again!");
     }
 
     // Verify the user credentials using OTP sent to her email
@@ -107,8 +112,9 @@ public class CustomUserDataService implements ICustomUserDataService {
 
     @Override
     public Optional<UserData> getUserById(Long userId) {
+        //System.out.println(" inside custom user data service method userId = "+ userId);
         Optional<UserData> userData = null;
-        userData = userDataRepository.findById(Math.toIntExact(userId));
+        userData = userDataRepository.findById(userId);
         return userData;
     }
     // Sends a token to the email id of the user, that token will be used to reset the password
@@ -142,7 +148,8 @@ public class CustomUserDataService implements ICustomUserDataService {
             throw new InvalidTokenException("The given token is NOT valid!");
         }
         else {
-            UserData userData = userDataRepository.findById(Math.toIntExact(userId)).get();
+            UserData userData = userDataRepository.findById(userId).get();
+            //Optional<UserData> userData = userDataRepository.findById(userId);
 
             if (userData == null){
                 throw new UserNotFoundException("The given user is NOT registered!");

@@ -5,11 +5,14 @@ import com.example.userregistration2.DTO.UserDTO;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_data")
 @NoArgsConstructor
 public @Data class UserData {
+
+    private static final long OTP_VALID_DURATION = 5 * 60 * 1000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +31,27 @@ public @Data class UserData {
     @Column(name="address")
     private String address;
 
+    @Column(name="otp")
+    private String otp;
+
+    @Column(name="otp_requested_time")
+    private Date otpRequestedTime;
+
+    public boolean isOTPRequired() {
+        if (this.getOtp() == null) {
+            return false;
+        }
+
+        long currentTimeInMillis = System.currentTimeMillis();
+        long otpRequestedTimeInMillis = this.otpRequestedTime.getTime();
+
+        if (otpRequestedTimeInMillis + OTP_VALID_DURATION < currentTimeInMillis) {
+            // OTP expires
+            return false;
+        }
+        return true;
+    }
+
     public UserData(UserDTO userDTO){
         this.updateUserData(userDTO);
     }
@@ -36,7 +60,6 @@ public @Data class UserData {
     public UserData(RegisterDTO registerDTO){
         this.registerUserData(registerDTO);
     }
-
 
     public void registerUserData(RegisterDTO registerDTO) {
         this.name = registerDTO.name;

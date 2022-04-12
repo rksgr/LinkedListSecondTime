@@ -33,7 +33,7 @@ export class CartService {
  * @returns An Observable of type any.
  */
   getAllCartBookId(token: String): Observable<any>{
-    return this.httpClient.get(`http://localhost:8080/cart/getbooklist/${token}`)
+    return this.httpClient.get(`http://localhost:8080/cart/getBookList/${token}`)
   }
 
 /**

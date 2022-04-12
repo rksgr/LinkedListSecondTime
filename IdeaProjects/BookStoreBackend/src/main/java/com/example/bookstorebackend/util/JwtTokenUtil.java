@@ -10,8 +10,6 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 
-import java.util.Calendar;
-import java.util.Date;
 
 @Component
 public class JwtTokenUtil {
@@ -44,7 +42,7 @@ public class JwtTokenUtil {
             Algorithm algorithm = Algorithm.HMAC512(SECRET_KEY);
 
             String jwtToken = JWT.create()
-                    .withClaim("id",id)
+                    .withClaim("userId",id)
                     .sign(algorithm);
 
             return jwtToken;
@@ -81,8 +79,11 @@ public class JwtTokenUtil {
 
     public Long decodeToken(String jwtToken) {
         Long userId;
+        System.out.println("printing value not assigned to a long type");
+        //System.out.println(userId);
+        System.out.println("Inside decode token");
         Verification verifyToken = null;
-
+        System.out.println("Token to be decode: "+ jwtToken);
         try {
             verifyToken = JWT.require(Algorithm.HMAC512(SECRET_KEY));
         } catch(IllegalArgumentException e) {
@@ -95,7 +96,9 @@ public class JwtTokenUtil {
 
         Claim claim = decodedJwt.getClaim("userId");
 
-        userId = claim.asLong();
+        userId =(Long) claim.asLong();
+        System.out.println("class of userId is: " + userId.getClass());
+        System.out.println("userId is: " + String.valueOf(userId));
         return userId;
     }
 }

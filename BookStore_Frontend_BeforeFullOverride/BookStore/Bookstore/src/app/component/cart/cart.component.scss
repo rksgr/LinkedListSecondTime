@@ -1,7 +1,29 @@
-.form-head{
-    display:flex;
-    justify-content: left;
-    margin: auto;
+.header{
+    padding:15px 0;
+    background-color:#571919;
+    height:70px;
+}
+.content-header{
+    position: relative;
+    align-items:stretch;
+    border: 0px solid green;
+    color:antiquewhite;
+}
+.logo-content{
+    position:absolute;
+    top:20px;
+    left:25px;
+    justify-content:left;
+    align-items:center;
+    border: 0px solid green;
+}
+.welcome-message{
+    position:absolute;
+    top:auto;
+    left: 600px;
+    font-size: xx-large;
+    color: rgb(238, 232, 232);
+    justify-content: space-between;
 }
 .sort{
     margin-inline-end: 5px;

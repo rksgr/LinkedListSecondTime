@@ -1,11 +1,11 @@
 export class Book {
 
-    book_id!: number;
-    name!: string;
-    author!: string;
-    description!: string;
-    logo!: string;
-    price!: number;
-    quantity!: number;
+    bookId!: number;
+    bookName!: string;
+    bookAuthor!: string;
+    bookDescription!: string;
+    bookLogo!: string;
+    bookPrice!: number;
+    bookQuantity!: number;
 }
 

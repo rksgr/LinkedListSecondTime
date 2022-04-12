@@ -2,15 +2,20 @@ package com.example.bookstorebackend.repository;
 
 import com.example.bookstorebackend.entity.UserData;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-public interface UserDataRepository extends JpaRepository<UserData, Integer> {
+@Repository
+public interface UserDataRepository extends JpaRepository<UserData, Long> {
 
     UserData findByEmailId(String emailId);
 
-    Optional<UserData> findById(Integer userId);
+    //@Query(value = "SELECT * from user_data where user_id= :userId",nativeQuery = true)
+    //Optional<UserData> findById(Integer userId);
 
-    UserData findByEmailIdAndPassword(String emailId, String password);
+    Optional<UserData> findByEmailIdAndPassword(String emailId, String password);
 
     void delete(UserData userData);
 }

@@ -1,10 +1,20 @@
 package com.example.userregistration2.util;
 
+import com.example.userregistration2.model.JwtRequest;
+import com.example.userregistration2.model.JwtResponse;
+import com.example.userregistration2.service.CustomUserDataService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +28,8 @@ public class JwtUtil {
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 5;
 
     private String SECRET_KEY = "altafhussainhussainaltaf";
+
+
 
     //retrieve username from jwt token
     public String getUserNameFromToken(String token)

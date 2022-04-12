@@ -2,6 +2,7 @@ package com.example.bookstorebackend.entity;
 
 import com.example.bookstorebackend.dto.RegisterDTO;
 import com.example.bookstorebackend.dto.UserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.type.LocalDateType;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user_data")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor
 public @Data
 class UserData {

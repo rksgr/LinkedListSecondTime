@@ -1,5 +1,6 @@
 package com.example.bookstorebackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import javax.persistence.*;
 
@@ -12,10 +13,12 @@ public @Data class CartData{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cartId;
 
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @ManyToOne
     @JoinColumn(name="user_id")
     private UserData userData;
 
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="book_id")
     private BookData bookData;

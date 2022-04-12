@@ -90,15 +90,7 @@ public class UserController {
     {
         UserData userData = null;
         ResponseDTO responseDTO = null;
-        userData = userDataService.loginUser(userLoginDTO);
-        if (userData != null)
-        {
-            responseDTO = new ResponseDTO(" User Login Success ", userData);
-        }
-        else
-        {
-            responseDTO = new ResponseDTO(" Oops! User Login Not Successful! ", userData);
-        }
+        responseDTO = userDataService.loginUser(userLoginDTO);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 

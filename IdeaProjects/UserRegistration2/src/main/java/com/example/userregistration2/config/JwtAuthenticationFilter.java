@@ -19,7 +19,6 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-
     @Autowired
     private CustomUserDataService customUserDataService;
 
@@ -53,14 +52,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Security
             if(username != null && SecurityContextHolder.getContext().getAuthentication() == null)
             {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
+                if(jwtUtil.validateToken(jwtToken, userDetails)){
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
 
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(usernamePasswordAuthenticationToken);
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(usernamePasswordAuthenticationToken);
+                }
             } else
             {
                 System.out.println("Token Invalid");

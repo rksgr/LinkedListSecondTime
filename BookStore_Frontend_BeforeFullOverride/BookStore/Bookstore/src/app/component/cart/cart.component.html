@@ -1,100 +1,32 @@
-<app-header></app-header>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!--<form class="form" [formGroup]="addBookToCartForm">-->
-    <form class="form">
-    <!--Display books -->
-    <div class="form-head" >
+<header class="header content-header">
+    <div class="logo-content">
+        <img src="../../../assets/images/education.png" alt="Logo Image">
+        <div>
+            <span class="content-header book-store">Bookstore</span>
+        </div>
+    </div>
+    <div>
+    <mat-label class="welcome-message" type="text"> The SGR BookStore!</mat-label>
+    <br>
+    </div>
+</header>
+    <div class="">       
+            <h1 >You have added {{bookIdLIst.length}} items to your cart:</h1>
+    </div>
+    
+    <div class="row-content" *ngFor="let book of bookIdLIst">
         
-            <mat-label >You have added following items to your cart:</mat-label>
+        <!-- Mention the list of books added in the cart -->
+            <img class="form-img-control" src="../../../assets/images/Image {{book.bookId}}.png" alt="Book14">
+            <br>
+            <span class="bookName">{{book.bookName}}</span>
+            <br>
+        <!--  <span class="bookDescription">{{book.bookDescription}}</span> -->
+            <br>
+            <span class="bookName">{{book.bookAuthor}}</span>
+            <br><br>
+            <button class="button-ctrl">Remove</button>
+
     </div>
-    <div class="row-content">
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br>
-            <label class="label-text" for="bookqty" >Quantity</label>
-            <br>
-            <span matBadge="4" matBadgeOverlap="false">Text with a badge</span>
-            <br><br>
-            <button class="button-ctrl">Remove from cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 12.png" alt="Book12">
-            <br>
-            <label class="label-text" for="book"> Book12 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <img class="form-img-control" src="../../../assets/images/Image 14.png" alt="Book14">
-            <br>
-            <label class="label-text" for="book"> Book 14 name</label>
-            <br><br>
-            <button class="button-ctrl">Add to Cart</button>
-        </mat-form-field>
-    </div>
-    </form>

@@ -6,7 +6,7 @@ import lombok.ToString;
 public @ToString
 class CartDTO {
 
-    public Long userId;
+    public String userId;
 
     public Long bookId;
 

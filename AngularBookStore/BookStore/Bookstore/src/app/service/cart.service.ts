@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CartService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
   
 /**
  * It adds an item to the cart.
@@ -15,7 +15,7 @@ export class CartService {
  * @returns An Observable of type Object.
  */
   addToCart(cart:Object): Observable<Object>{
-    return this.http.post(`http://localhost:8080/cart/add`, cart)
+    return this.httpClient.post(`http://localhost:8080/cart/add`, cart)
   }
 
 /**
@@ -24,7 +24,7 @@ export class CartService {
  * @returns An Observable of type any.
  */
   getAllCarts(token: String): Observable<any>{
-    return this.http.get(`http://localhost:8080/cart/get/${token}`)
+    return this.httpClient.get(`http://localhost:8080/cart/get/${token}`)
   }
 
 /**
@@ -33,7 +33,7 @@ export class CartService {
  * @returns An Observable of type any.
  */
   getAllCartBookId(token: String): Observable<any>{
-    return this.http.get(`http://localhost:8080/cart/getbooklist/${token}`)
+    return this.httpClient.get(`http://localhost:8080/cart/getbooklist/${token}`)
   }
 
 /**
@@ -43,7 +43,7 @@ export class CartService {
  */
   removeFromCart(cart_id: number): Observable<any> {
     console.log("rem")
-    return this.http.delete(`http://localhost:8080/cart/remove/${cart_id}`);
+    return this.httpClient.delete(`http://localhost:8080/cart/remove/${cart_id}`);
   }
 
 /**
@@ -52,7 +52,7 @@ export class CartService {
  */
   removeAllCarts(): Observable<any> {
     const token = localStorage.getItem("token");
-    return this.http.delete(`http://localhost:8080/cart/removeall/${token}`);
+    return this.httpClient.delete(`http://localhost:8080/cart/removeall/${token}`);
   }
 
 /**
@@ -66,6 +66,6 @@ export class CartService {
     const params = new HttpParams()
                 .set('cart_id', cart_id)
                 .set('quantity', quantity);
-    return this.http.put(`http://localhost:8080/cart/update/${token}`, params)
+    return this.httpClient.put(`http://localhost:8080/cart/update/${token}`, params)
   }
 }

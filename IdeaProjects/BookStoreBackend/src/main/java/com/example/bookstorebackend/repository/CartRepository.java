@@ -2,9 +2,15 @@ package com.example.bookstorebackend.repository;
 
 import com.example.bookstorebackend.entity.CartData;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
-@Repository
-public interface CartRepository extends JpaRepository<CartData, Integer> {
+import java.util.List;
 
+public interface CartRepository extends JpaRepository<CartData, Long> {
+
+    @Query(value="select * from cart_data where user_id=:user_id", nativeQuery = true)
+    List<CartData> findAllCartsByUserId(Long user_id);
+
+    //@Query(value = "SELECT * FROM cart_data where user_id= :user_id", nativeQuery = true)
+    //List<CartData> findAllCartsByUserId(Long userId);
 }
